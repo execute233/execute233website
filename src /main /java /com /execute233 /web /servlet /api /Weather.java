@@ -20,19 +20,19 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 public class Weather extends HttpServlet {
-    public static final String appid = "46882813";
-    public static final String appsecret = "nuZZS4SB";
-    public static final String version = "v61";
+    public static final String appid = "";
+    public static final String appsecret = "";
+    public static final String version = "";
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         String ip = req.getRemoteAddr();
-        if (ip.equals("223.74.58.106")||ip.startsWith("192.168.0")) {
-            ip = "223.74.58.106";
+        if (ip.equals("")||ip.startsWith("")) {
+            ip = "";
         }
         HttpGet get = new HttpGet();
         try {
-            URIBuilder builder = new URIBuilder("https://v0.yiketianqi.com/api");
+            URIBuilder builder = new URIBuilder("");
             builder.setParameter("appid",appid);
             builder.setParameter("appsecret",appsecret);
             builder.setParameter("version",version);
