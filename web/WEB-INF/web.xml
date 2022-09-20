@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <!--配置servlet-->
+    <!--index.html界面-->
+    <servlet>
+        <servlet-name>Index</servlet-name>
+        <servlet-class>com.execute233.web.servlet.Index</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Index</servlet-name>
+        <url-pattern>/index.html</url-pattern>
+
+    </servlet-mapping>
+    <!--weather-->
+    <servlet>
+        <servlet-name>weather</servlet-name>
+        <servlet-class>com.execute233.web.servlet.api.Weather</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>weather</servlet-name>
+        <url-pattern>/api/weather</url-pattern>
+    </servlet-mapping>
+    <!--背景-->
+    <servlet>
+        <servlet-name>background</servlet-name>
+        <servlet-class>com.execute233.web.servlet.api.Background</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>background</servlet-name>
+        <url-pattern>/api/background</url-pattern>
+    </servlet-mapping>
+    <!--二次元背景-->
+    <servlet>
+        <servlet-name>background2</servlet-name>
+        <servlet-class>com.execute233.web.servlet.api.Background2</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>background2</servlet-name>
+        <url-pattern>/api/background2</url-pattern>
+    </servlet-mapping>
+    <!--404界面-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.html</location>
+    </error-page>
+</web-app>

@@ -1,0 +1,13 @@
+@font-face {
+	font-family: artfont;
+	src: url("../res/font/Pacifico-Regular.ttf");
+}
+
+@font-face {
+	font-family: MiSans;
+	src: url("../res/font/MiSans-Normal.ttf");
+}
+@font-face {
+	font-family: clock;
+	src :url("../res/font/LESLIE-Regular.ttf");
+}
