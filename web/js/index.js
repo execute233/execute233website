@@ -89,46 +89,39 @@ function updateTime() { // 更新时间
 	document.querySelector("#date").innerText = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 星期${dayName}`;
 }
 
-
-// 换背景
-async function newImg() {
-	const result = await fetchData('api/background', false);
-	if (result.success) {
-		console.log('换背景成功，新背景地址：', result.result);
-		document.querySelector('html').style.background = `#333 url("${result.result}") no-repeat fixed center`;
-	} else {
-		console.error('换背景失败，错误信息：', result.message);
-		Swal.fire('换背景失败', result.message, 'error');
+{ // 换背景
+	async function changeBackground(subUrl) {
+		const result = await fetchData('api/' + subUrl, false);
+		if (result.success) {
+			console.log('换背景成功，新背景地址：', result.result);
+			document.querySelector('html').style.background = `#333 url("${result.result}") no-repeat fixed center`;
+		} else {
+			console.error('换背景失败，错误信息：', result.message);
+			Swal.fire('换背景失败', result.message, 'error');
+		}
 	}
-}
-// 换一张二次元图片
-async function new2Img() {
-	const result = await fetchData('api/background2', false);
-	if (result.success) {
-		console.log('换背景成功，新背景地址：', result.result);
-		document.querySelector('html').style.background = `#333 url("${result.result}") no-repeat fixed center`;
-	} else {
-		console.error('换背景失败，错误信息：', result.message);
-		Swal.fire('换背景失败', result.message, 'error');
-	}
+	document.querySelector('#changeBackground1').addEventListener('click', () => changeBackground('background'));
+	document.querySelector('#changeBackground2').addEventListener('click', () => changeBackground('background2'));
 }
 
 
-(async function() { // 获取天气
-	const result = await fetchData('api/weather');
-	if (result.success) {
-		console.log('获取天气成功，天气信息：', result.result);
-		const city = result.result.city, // 城市
-			weather = result.result.wea, // 天气
-			temperature_night = result.result.tem_night, // 最低温度
-			temperature_day = result.result.tem_day; // 最高温度
-		document.querySelector("#todayWeather").innerText = `${city} ${weather} ${temperature_night}℃~${temperature_day}℃`;
-	} else {
-		console.error('获取天气失败，错误信息：', result.message);
-		Swal.fire('获取天气失败', result.message, 'error');
-	}
-})();
-
+{
+	(async function () { // 获取天气
+		const result = await fetchData('api/weather');
+		if (result.success) {
+			console.log('获取天气成功，天气信息：', result.result);
+			const city = result.result.city, // 城市
+				weather = result.result.wea, // 天气
+				temperature_night = result.result.tem_night, // 最低温度
+				temperature_day = result.result.tem_day; // 最高温度
+			document.querySelector("#todayWeather").innerText = `${city} ${weather} ${temperature_night}℃~${temperature_day}℃`;
+		} else {
+			console.error('获取天气失败，错误信息：', result.message);
+			Swal.fire('获取天气失败', result.message, 'error');
+			document.querySelector("#todayWeather").innerText = '获取天气失败';
+		}
+	})();
+}
 
 {
 	//换鼠标样式
