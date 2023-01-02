@@ -1,57 +1,73 @@
-addAction();
-setDate();
-setTime();
-newImg();
+async function copy(text) { // 复制功能
+	try {
+		await navigator.clipboard.writeText(text);
+		console.log('Copied: ', text);
+		Swal.fire({
+			title: '复制成功',
+			text: `已复制到剪贴板！`,
+			icon: 'success',
+			footer: `复制的内容：${text}`
+		});
+	} catch (err) {
+		console.error('Failed to copy: ', err);
+		Swal.fire('复制失败', `请手动复制：${text}`, 'error');
+	}
+}
 
-weather();
-/*注册事件*/
-function addAction() {
-	$("#music").mouseenter(function () {
-		$(this).text("被你发现了(,,#゜Д゜)")
-	}).mouseleave(function () {
-		$(this).text("")
+function updateTime() { // 更新时间
+	const date = new Date(),
+		hours = date.getHours(),
+		minutes = date.getMinutes(),
+		seconds = date.getSeconds();
+	document.querySelector("#time").innerText = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+}
+{
+	console.log('更新时间 Interval ID: ', setInterval(updateTime, 500));
+	updateTime();
+}
+
+
+
+{ // 注册搞怪事件
+	const music = document.querySelector('#music');
+	music.addEventListener('mouseenter', function () {
+		this.innerText = '被你发现了(,,#゜Д゜)';
+	});
+	music.addEventListener('mouseleave', function () {
+		this.innerText = '';
 	});
 }
-/*日期设置*/
-function setDate() {
-	var date=new Date();
-	if (date.getDay()==1){
-		dayName="一";
-	} else if (date.getDay()==2) {
-		dayName="二";
-	} else if (date.getDay()==3) {
-		dayName="三";
-	} else if (date.getDay()==4) {
-		dayName="四";
-	} else if (date.getDay()==5) {
-		dayName="五";
-	} else if (date.getDay()==6) {
-		dayName="六";
-	} else if (date.getDay()==0) {
-		dayName="日";
+
+{ // 日期设置
+	const date = new Date();
+	let dayName = '未知';
+	switch (date.getDay()) {
+		case 1:
+			dayName = "一";
+			break;
+		case 2:
+			dayName = "二";
+			break;
+		case 3:
+			dayName = "三";
+			break;
+		case 4:
+			dayName = "四";
+			break;
+		case 5:
+			dayName = "五";
+			break;
+		case 6:
+			dayName = "六";
+			break;
+		case 0:
+			dayName = "日";
+			break;
 	}
-	var dateString=date.getFullYear()+"\u00A0年\u00A0"+date.getMonth()+"\u00A0月\u00A0"+date.getDate()+"\u00A0日\u00A0星期"+dayName;
-	$("#date").text(dateString);	
+	document.querySelector("#date").innerText = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 星期${dayName}`;
 }
-//时间设置
-function setTime() {
-	var date=new Date();
-	var hours=date.getHours();
-	if (hours.toString().length==1) {
-		hours="0"+hours;
-	}
-	var minutes=date.getMinutes();
-	if (minutes.toString().length==1) {
-		minutes="0"+minutes;
-	}
-	var seconds=date.getSeconds();
-	if (seconds.toString().length==1) {
-		seconds="0"+seconds;
-	}
-	var time=hours+":"+minutes+":"+seconds;
-	$("#time").text(time);
-	setTimeout(setTime,1000);
-}
+
+/* 用啥 Ajax 啊？用啥 jQuery 啊？还不赶紧用 Fetch 重写？@execute233
 //换背景
 function newImg() {
 	$.ajax({
@@ -59,10 +75,10 @@ function newImg() {
 		type: "get",
 		data: {},
 		contentType: "text",
-		success:function(url){
-			$("html").css("background","#333 url(\""+url+"\") no-repeat fixed center");
+		success: function (url) {
+			$("html").css("background", "#333 url(\"" + url + "\") no-repeat fixed center");
 		},
-		error: function() {
+		error: function () {
 
 		}
 	});
@@ -74,18 +90,15 @@ function new2Img() {
 		type: "get",
 		data: {},
 		contentType: "text/text",
-		success:function(url){
-			$("html").css("background","#333 url(\""+url+"\") no-repeat fixed center");
+		success: function (url) {
+			$("html").css("background", "#333 url(\"" + url + "\") no-repeat fixed center");
 		},
-		error: function() {
+		error: function () {
 
 		}
 	});
 }
-//换鼠标样式
-function newmouse() {
-	alert("还没做好...");
-}
+
 //天气设置
 function weather() {
 	$.ajax({
@@ -93,34 +106,26 @@ function weather() {
 		type: "get",
 		data: {},
 		contentType: "text/json",
-		success:function(json){
-			var city=json.city;//城市名
-			var wea=json.wea;//天气
-			var tem_night=json.tem_night;//最低温度
-			var tem_day=json.tem_day;//最高温度
-			var result=city.toString()+"\u00A0"+wea.toString()+"\u00A0"+tem_night.toString()+"℃~"+tem_day.toString()+"℃";
+		success: function (json) {
+			var city = json.city;//城市名
+			var wea = json.wea;//天气
+			var tem_night = json.tem_night;//最低温度
+			var tem_day = json.tem_day;//最高温度
+			var result = city.toString() + "\u00A0" + wea.toString() + "\u00A0" + tem_night.toString() + "℃~" + tem_day.toString() + "℃";
 			$("#todayWeather").text(result);
 		},
-		error: function() {
+		error: function () {
 
 		}
 	});
 }
-//复制到剪切板
-function copyQQ() {
-	copy("1647643661");
-}
-function copyWechat() {
-	copy("execute233");
-}
-function copy(value) {
-	const input=document.createElement('input');
-	    document.body.appendChild(input);
-	    input.setAttribute('value', value);
-	    input.select();
-	    if (document.execCommand('copy')) {
-	        document.execCommand('copy');
-	        alert("复制成功")
-	    }
-	 document.body.removeChild(input);
+*/
+
+{
+	//换鼠标样式
+	document.querySelector('#newMouse').addEventListener('click', () => Swal.fire("还没做好", '此功能仍在开发中……', 'warning'));
+
+	// 复制到剪切板
+	document.querySelector('#copyQQ').addEventListener('click', () => copy('1647643661'));
+	document.querySelector('#copyWeChat').addEventListener('click', () => copy("execute233"));
 }
