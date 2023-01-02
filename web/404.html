@@ -1,46 +1,57 @@
 <!DOCTYPE html>
-<html lang="zn-CN">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>404 Not Found!</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
-	<meta name="description" content="龙川县第一中学计算机协会的某位成员的网站">
-	<meta name="keywords" content="execute233">
-
+	<meta charset="UTF-8" />
+	<title>404 Not Found!</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="龙川县第一中学计算机协会的某位成员的网站" />
+	<meta name="keywords" content="execute233" />
 	<style>
-		.error_page_img{
+		.error_page {
+			text-align: center;
+		}
+
+		.error_page_img {
 			display: block;
 			margin: 0 auto;
 			padding: 0;
 			outline: none;
 		}
-		.error_page_text{
+
+		.error_page_text {
 			margin-top: 60px;
-			text-align: center;
 			font-size: 16px;
+			color: #999;
+		}
+
+		a:link,
+		a:hover,
+		a:active,
+		a:visited {
+			text-decoration: none;
 			color: #999;
 		}
 	</style>
 </head>
 <body>
 	<div class="error_page">
-		<img class="error_page_img" src="res/404.png" alt="404_img"/>
+		<img class="error_page_img" src="res/404.png" alt="404_img" />
 		<p class="error_page_text">您的页面好像已经偏离了地球...</p>
-		<p class="error_page_text" id="link_text">页面将于5秒后跳转至主页</p>
+		<a class="error_page_text" id="redirect" href="/index.html">页面将于10秒后跳转至主页</a>
 	</div>
-	
+	<script>
+		{
+			const redirect = document.querySelector("#redirect");
+			let seconds = 10;
 
-	<script type="text/javascript">
-		times = 5;
-		document.getElementById("link_text").innerHTML="页面将于"+times+"秒后跳转至主页";
-		setInterval("link_times()",1000);
-		
-		function link_times() {
-		    times--;
-		    document.getElementById("link_text").innerHTML="页面将于"+times+"秒后跳转至主页";
-		    if (times <= 0) {
-		        location.href="/index.html";
-		    }
+			function countdown() {
+				if (--seconds <= 0) {
+					location.href = "/index.html";
+				}
+				redirect.innerText = `页面将于${seconds}秒后跳转至主页`;
+			}
+
+			setInterval(countdown, 1000);
 		}
 	</script>
 </body>
