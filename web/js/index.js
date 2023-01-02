@@ -1,48 +1,3 @@
-async function copy(text) { // 复制功能
-	console.log('尝试复制：', text);
-	try {
-		await navigator.clipboard.writeText(text);
-		console.log('使用 navigator.clipboard.writeText 复制成功。');
-		Swal.fire({
-			title: '复制成功',
-			text: `已复制到剪贴板！`,
-			icon: 'success',
-			footer: `复制的内容：${text}`
-		});
-	} catch (err) {
-		console.error('尝试使用 navigator.clipboard.writeText 复制失败：', err);
-
-		// 用 execCommand('copy') 来 FallBack
-		const input = document.createElement('input');
-		input.setAttribute('readonly', 'readonly');
-		input.style.position = 'fixed';
-		input.style.top = '-9999em';
-		input.style.height = '0';
-		input.value = text;
-		document.body.appendChild(input);
-		input.select();
-		input.setSelectionRange(0, 9999);
-		if (document.execCommand != null && document.execCommand('copy')) {
-			console.log('使用 document.execCommand 复制成功。');
-			Swal.fire({
-				title: '复制成功',
-				text: `已复制到剪贴板！`,
-				icon: 'success',
-				footer: `复制的内容：${text}`
-			});
-		} else {
-			console.error('使用 document.execCommand 复制失败，document.execCommand 是否存在：', document.execCommand != null ? '是' : '否');
-			Swal.fire({
-				title: '复制失败',
-				text: `请手动复制：${text}`,
-				icon: 'error',
-				footer: `${err.name}: ${err.message}<br/>document.execCommand 是否存在：${document.execCommand != null ? '是' : '否'}`
-			});
-		}
-		document.body.removeChild(input);
-	}
-}
-
 async function fetchData(url, asJson = true, options = {}) { // 获取数据
 	let message = '';
 	try {
@@ -72,14 +27,13 @@ function updateTime() { // 更新时间
 		seconds = date.getSeconds();
 	document.querySelector("#time").innerText = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 }
-{
-	console.log('更新时间 Interval ID: ', setInterval(updateTime, 500));
-	updateTime();
-}
+console.log('更新时间 Interval ID: ', setInterval(updateTime, 500));
+updateTime();
 
 
+{ // 防止变量污染全局作用域
 
-{ // 注册搞怪事件
+	// 注册搞怪事件
 	const music = document.querySelector('#music');
 	music.addEventListener('mouseenter', function () {
 		this.innerText = '被你发现了(,,#゜Д゜)';
@@ -87,9 +41,9 @@ function updateTime() { // 更新时间
 	music.addEventListener('mouseleave', function () {
 		this.innerText = '';
 	});
-}
 
-{ // 日期设置
+
+	// 日期设置
 	const date = new Date();
 	let dayName = '未知';
 	switch (date.getDay()) {
@@ -116,10 +70,10 @@ function updateTime() { // 更新时间
 			break;
 	}
 	document.querySelector("#date").innerText = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 星期${dayName}`;
-}
 
-{ // 换背景
-	async function changeBackground() {
+
+	// 换背景
+	document.querySelectorAll('.changeBackground').forEach(e => e.addEventListener('click', async function () {
 		const result = await fetchData('api/' + this.dataset.backgroundSubUrl, false);
 		if (result.success) {
 			console.log('换背景成功，新背景地址：', result.result);
@@ -128,13 +82,11 @@ function updateTime() { // 更新时间
 			console.error('换背景失败，错误信息：', result.message);
 			Swal.fire('换背景失败', result.message, 'error');
 		}
-	}
-	document.querySelectorAll('.changeBackground').forEach(e => e.addEventListener('click', changeBackground));
-}
+	}));
 
 
-{
-	(async function () { // 获取天气
+	// 获取天气
+	(async function () {
 		const result = await fetchData('api/weather');
 		if (result.success) {
 			const data = result.result;
@@ -146,13 +98,55 @@ function updateTime() { // 更新时间
 			document.querySelector("#todayWeather").innerText = '获取天气失败';
 		}
 	})();
-}
 
-{
+
 	// 换鼠标样式
 	document.querySelector('#newMouse').addEventListener('click', () => Swal.fire("还没做好", '此功能仍在开发中……', 'warning'));
 
 	// 复制到剪切板
-	document.querySelector('#copyQQ').addEventListener('click', () => copy('1647643661'));
-	document.querySelector('#copyWeChat').addEventListener('click', () => copy("execute233"));
+	document.querySelectorAll('.copy').forEach(e => e.addEventListener('click', async function () {
+		const text = this.dataset.copyText;
+		console.log('尝试复制：', text);
+		try {
+			await navigator.clipboard.writeText(text); // 尝试使用 Clipboard API
+			console.log('使用 navigator.clipboard.writeText 复制成功。');
+			Swal.fire({
+				title: '复制成功',
+				text: `已复制到剪贴板！`,
+				icon: 'success',
+				footer: `复制的内容：${text}`
+			});
+		} catch (err) {
+			console.error('尝试使用 navigator.clipboard.writeText 复制失败：', err);
+
+			// 用 execCommand('copy') 来 FallBack
+			const input = document.createElement('input');
+			input.readOnly = true;
+			input.style.position = 'fixed';
+			input.style.top = '-9999em';
+			input.style.height = '0';
+			input.value = text;
+			document.body.appendChild(input);
+			input.select();
+			input.setSelectionRange(0, 9999);
+			if (document.execCommand != null && document.execCommand('copy')) {
+				console.log('使用 document.execCommand 复制成功。');
+				Swal.fire({
+					title: '复制成功',
+					text: `已复制到剪贴板！`,
+					icon: 'success',
+					footer: `复制的内容：${text}`
+				});
+			} else {
+				console.error('使用 document.execCommand 复制失败，document.execCommand 是否存在：', document.execCommand != null ? '是' : '否');
+				Swal.fire({
+					title: '复制失败',
+					text: `请手动复制：${text}`,
+					icon: 'error',
+					footer: `${err.name}: ${err.message}<br/>document.execCommand 是否存在：${document.execCommand != null ? '是' : '否'}`
+				});
+			}
+			document.body.removeChild(input);
+		}
+	}));
 }
