@@ -14,6 +14,28 @@ async function copy(text) { // 复制功能
 	}
 }
 
+async function fetchData(url, asJson = true, options = {}) { // 获取数据
+	let message = '';
+	try {
+		const response = await fetch(url, options);
+		if (response.ok) {
+			try {
+				return { success: true, result: await (asJson ? response.json() : response.text()), message: '' };
+			} catch (e) {
+				message = '在解析 JSON 过程中发生异常，详细信息请见控制台！';
+				console.error('在解析 JSON 过程中发生异常：', e);
+			}
+		} else {
+			message = '在 Fetch 过程中接收到了不成功的状态码，详细信息请见控制台！';
+			console.error('在 Fetch 过程中接收到了不成功的状态码，响应对象：', response);
+		}
+	} catch (e) {
+		message = '在 Fetch 过程中发生异常，详细信息请见控制台！';
+		console.error('在 Fetch 过程中发生异常：', e);
+	}
+	return { success: false, result: null, message };
+}
+
 function updateTime() { // 更新时间
 	const date = new Date(),
 		hours = date.getHours(),
@@ -67,59 +89,46 @@ function updateTime() { // 更新时间
 	document.querySelector("#date").innerText = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 星期${dayName}`;
 }
 
-/* 用啥 Ajax 啊？用啥 jQuery 啊？还不赶紧用 Fetch 重写？@execute233
-//换背景
-function newImg() {
-	$.ajax({
-		url: "api/background",
-		type: "get",
-		data: {},
-		contentType: "text",
-		success: function (url) {
-			$("html").css("background", "#333 url(\"" + url + "\") no-repeat fixed center");
-		},
-		error: function () {
 
-		}
-	});
+// 换背景
+async function newImg() {
+	const result = await fetchData('api/background', false);
+	if (result.success) {
+		console.log('换背景成功，新背景地址：', result.result);
+		document.querySelector('html').style.background = `#333 url("${result.result}") no-repeat fixed center`;
+	} else {
+		console.error('换背景失败，错误信息：', result.message);
+		Swal.fire('换背景失败', result.message, 'error');
+	}
 }
-//换一张二次元图片
-function new2Img() {
-	$.ajax({
-		url: "/api/background2",
-		type: "get",
-		data: {},
-		contentType: "text/text",
-		success: function (url) {
-			$("html").css("background", "#333 url(\"" + url + "\") no-repeat fixed center");
-		},
-		error: function () {
-
-		}
-	});
+// 换一张二次元图片
+async function new2Img() {
+	const result = await fetchData('api/background2', false);
+	if (result.success) {
+		console.log('换背景成功，新背景地址：', result.result);
+		document.querySelector('html').style.background = `#333 url("${result.result}") no-repeat fixed center`;
+	} else {
+		console.error('换背景失败，错误信息：', result.message);
+		Swal.fire('换背景失败', result.message, 'error');
+	}
 }
 
-//天气设置
-function weather() {
-	$.ajax({
-		url: "api/weather",
-		type: "get",
-		data: {},
-		contentType: "text/json",
-		success: function (json) {
-			var city = json.city;//城市名
-			var wea = json.wea;//天气
-			var tem_night = json.tem_night;//最低温度
-			var tem_day = json.tem_day;//最高温度
-			var result = city.toString() + "\u00A0" + wea.toString() + "\u00A0" + tem_night.toString() + "℃~" + tem_day.toString() + "℃";
-			$("#todayWeather").text(result);
-		},
-		error: function () {
 
-		}
-	});
-}
-*/
+(async function() { // 获取天气
+	const result = await fetchData('api/weather');
+	if (result.success) {
+		console.log('获取天气成功，天气信息：', result.result);
+		const city = result.result.city, // 城市
+			weather = result.result.wea, // 天气
+			temperature_night = result.result.tem_night, // 最低温度
+			temperature_day = result.result.tem_day; // 最高温度
+		document.querySelector("#todayWeather").innerText = `${city} ${weather} ${temperature_night}℃~${temperature_day}℃`;
+	} else {
+		console.error('获取天气失败，错误信息：', result.message);
+		Swal.fire('获取天气失败', result.message, 'error');
+	}
+})();
+
 
 {
 	//换鼠标样式
