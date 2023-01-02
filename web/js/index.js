@@ -90,8 +90,8 @@ function updateTime() { // 更新时间
 }
 
 { // 换背景
-	async function changeBackground(subUrl) {
-		const result = await fetchData('api/' + subUrl, false);
+	async function changeBackground() {
+		const result = await fetchData('api/' + this.dataset.backgroundSubUrl, false);
 		if (result.success) {
 			console.log('换背景成功，新背景地址：', result.result);
 			document.querySelector('html').style.background = `#333 url("${result.result}") no-repeat fixed center`;
@@ -100,8 +100,7 @@ function updateTime() { // 更新时间
 			Swal.fire('换背景失败', result.message, 'error');
 		}
 	}
-	document.querySelector('#changeBackground1').addEventListener('click', () => changeBackground('background'));
-	document.querySelector('#changeBackground2').addEventListener('click', () => changeBackground('background2'));
+	document.querySelectorAll('.changeBackground').forEach(e => e.addEventListener('click', changeBackground));
 }
 
 
@@ -117,7 +116,7 @@ function updateTime() { // 更新时间
 			document.querySelector("#todayWeather").innerText = `${city} ${weather} ${temperature_night}℃~${temperature_day}℃`;
 		} else {
 			console.error('获取天气失败，错误信息：', result.message);
-			Swal.fire('获取天气失败', result.message, 'error');
+			//Swal.fire('获取天气失败', result.message, 'error');
 			document.querySelector("#todayWeather").innerText = '获取天气失败';
 		}
 	})();

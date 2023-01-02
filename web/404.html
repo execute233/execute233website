@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
 	<meta charset="UTF-8" />
-	<title>404 Not Found!</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content="龙川县第一中学计算机协会的某位成员的网站" />
 	<meta name="keywords" content="execute233" />
+	<title>404 Not Found!</title>
 	<style>
 		.error_page {
 			text-align: center;
@@ -51,7 +51,7 @@
 				redirect.innerText = `页面将于${seconds}秒后跳转至主页`;
 			}
 
-			setInterval(countdown, 1000);
+			console.log('跳转倒计时 Interval ID: ', setInterval(countdown, 1000));
 		}
 	</script>
 </body>
