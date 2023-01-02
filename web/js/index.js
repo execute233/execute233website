@@ -1,7 +1,8 @@
 async function copy(text) { // 复制功能
+	console.log('尝试复制：', text);
 	try {
 		await navigator.clipboard.writeText(text);
-		console.log('Copied: ', text);
+		console.log('使用 navigator.clipboard.writeText 复制成功。');
 		Swal.fire({
 			title: '复制成功',
 			text: `已复制到剪贴板！`,
@@ -9,8 +10,36 @@ async function copy(text) { // 复制功能
 			footer: `复制的内容：${text}`
 		});
 	} catch (err) {
-		console.error('Failed to copy: ', err);
-		Swal.fire('复制失败', `请手动复制：${text}`, 'error');
+		console.error('尝试使用 navigator.clipboard.writeText 复制失败：', err);
+
+		// 用 execCommand('copy') 来 FallBack
+		const input = document.createElement('input');
+		input.setAttribute('readonly', 'readonly');
+		input.style.position = 'fixed';
+		input.style.top = '-9999em';
+		input.style.height = '0';
+		input.value = text;
+		document.body.appendChild(input);
+		input.select();
+		input.setSelectionRange(0, 9999);
+		if (document.execCommand != null && document.execCommand('copy')) {
+			console.log('使用 document.execCommand 复制成功。');
+			Swal.fire({
+				title: '复制成功',
+				text: `已复制到剪贴板！`,
+				icon: 'success',
+				footer: `复制的内容：${text}`
+			});
+		} else {
+			console.error('使用 document.execCommand 复制失败，document.execCommand 是否存在：', document.execCommand != null ? '是' : '否');
+			Swal.fire({
+				title: '复制失败',
+				text: `请手动复制：${text}`,
+				icon: 'error',
+				footer: `${err.name}: ${err.message}<br/>document.execCommand 是否存在：${document.execCommand != null ? '是' : '否'}`
+			});
+		}
+		document.body.removeChild(input);
 	}
 }
 
@@ -120,7 +149,7 @@ function updateTime() { // 更新时间
 }
 
 {
-	//换鼠标样式
+	// 换鼠标样式
 	document.querySelector('#newMouse').addEventListener('click', () => Swal.fire("还没做好", '此功能仍在开发中……', 'warning'));
 
 	// 复制到剪切板

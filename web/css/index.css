@@ -51,16 +51,16 @@ body,
 	object-fit: fill;
 }
 
-#webname {
+#nickname {
 	height: 140px;
 	text-align: left;
 	font-size: 400%;
-	font-family: "artfont", serif;
+	font-family: "ArtFont", serif;
 }
 
 #personal-signature {
 	text-align: left;
-	font-family: "artfont", serif;
+	font-family: "ArtFont", serif;
 	margin-left: 5%;
 }
 
@@ -227,9 +227,3 @@ body,
 .white {
 	color: white;
 }
-
-/*
-#changeBackground2 {
-	display: none;
-}
-*/
