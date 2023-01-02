@@ -1,5 +1,6 @@
 package com.execute233.web.util;
 
+
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
@@ -7,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class WebFileReader {
-    static Logger logger = Logger.getLogger("web");
+    static Logger logger = Logger.getLogger("CATALINA");
     static ServletContext context = null;
 
     public static void preload(ServletContext context) {

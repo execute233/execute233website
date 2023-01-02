@@ -1,50 +1,30 @@
 package com.execute233.web.servlet.api;
 
-import com.alibaba.fastjson.JSONObject;
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.HttpClients;
+import com.alibaba.fastjson2.JSONObject;
+import com.execute233.web.util.QuicklyHttp;
+import lombok.Data;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 
 public class Weather extends HttpServlet {
+    /**
+     * 天气API的url
+     **/
+    public static final String url = "https://v0.yiketianqi.com/api";
     public static final String appid = "";
-    public static final String appsecret = "";
-    public static final String version = "";
+    public static final String appSecret = "";
+    public static final String version = "v61";
 
     @Override
-    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        String ip = req.getRemoteAddr();
-        if (ip.equals("")||ip.startsWith("")) {
-            ip = "";
-        }
-        HttpGet get = new HttpGet();
-        try {
-            URIBuilder builder = new URIBuilder("");
-            builder.setParameter("appid",appid);
-            builder.setParameter("appsecret",appsecret);
-            builder.setParameter("version",version);
-            builder.setParameter("ip",ip);
-            get.setURI(builder.build());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        HttpClient client = HttpClients.createDefault();
-        HttpResponse weatherRes = client.execute(get);
-        InputStream inputStream = weatherRes.getEntity().getContent();
-        String json = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+    public void service(ServletRequest req, ServletResponse res) throws IOException {
+        String json = QuicklyHttp.create().url(url).addParameter("appid",appid)
+                .addParameter("appsecret", appSecret)
+                .addParameter("version",version)
+                .addParameter("ip", req.getRemoteAddr())
+                .execute().responseBody();
         JSONObject object = JSONObject.parseObject(json);
         WeatherJSON weatherJSON = new WeatherJSON(object.getString("city"), object.getString("wea"), object.getString("tem2"), object.getString("tem1"));
         res.setContentType("application/json");
@@ -52,8 +32,7 @@ public class Weather extends HttpServlet {
         res.getWriter().print(JSONObject.toJSONString(weatherJSON));
     }
 }
-@Getter
-@Setter
+@Data
 class WeatherJSON {
     public WeatherJSON(String city, String weather, String temperature_night, String temperature_day) {
         this.city = city;
