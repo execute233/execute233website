@@ -108,12 +108,9 @@ function updateTime() { // 更新时间
 	(async function () { // 获取天气
 		const result = await fetchData('api/weather');
 		if (result.success) {
-			console.log('获取天气成功，天气信息：', result.result);
-			const city = result.result.city, // 城市
-				weather = result.result.wea, // 天气
-				temperature_night = result.result.tem_night, // 最低温度
-				temperature_day = result.result.tem_day; // 最高温度
-			document.querySelector("#todayWeather").innerText = `${city} ${weather} ${temperature_night}℃~${temperature_day}℃`;
+			const data = result.result;
+			console.log('获取天气成功，天气信息：', data);
+			document.querySelector("#todayWeather").innerText = `${data.city} ${data.weather} ${data.temperature_night}℃~${data.temperature_day}℃`;
 		} else {
 			console.error('获取天气失败，错误信息：', result.message);
 			//Swal.fire('获取天气失败', result.message, 'error');

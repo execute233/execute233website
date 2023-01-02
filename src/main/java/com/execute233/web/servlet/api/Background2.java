@@ -36,7 +36,7 @@ public class Background2 extends HttpServlet {
         JSONObject object = JSONObject.parseObject(json);
         String url = object.getString("img");
 
-        res.setContentType("text/text");
+        res.setContentType("text/plain");
         res.setCharacterEncoding("utf-8");
         res.getWriter().print(url);
     }

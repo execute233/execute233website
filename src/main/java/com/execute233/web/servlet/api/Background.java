@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Background extends HttpServlet {
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        res.setContentType("text/text");
+        res.setContentType("text/plain");
         res.setCharacterEncoding("utf-8");
         res.getWriter().print(Res.getBackgroundURL());
     }

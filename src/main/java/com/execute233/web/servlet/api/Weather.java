@@ -47,7 +47,7 @@ public class Weather extends HttpServlet {
         String json = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         JSONObject object = JSONObject.parseObject(json);
         WeatherJSON weatherJSON = new WeatherJSON(object.getString("city"), object.getString("wea"), object.getString("tem2"), object.getString("tem1"));
-        res.setContentType("text/json");
+        res.setContentType("application/json");
         res.setCharacterEncoding("utf-8");
         res.getWriter().print(JSONObject.toJSONString(weatherJSON));
     }
@@ -55,15 +55,15 @@ public class Weather extends HttpServlet {
 @Getter
 @Setter
 class WeatherJSON {
-    public WeatherJSON(String city, String wea, String tem_night, String tem_day) {
+    public WeatherJSON(String city, String weather, String temperature_night, String temperature_day) {
         this.city = city;
-        this.wea = wea;
-        this.tem_night = tem_night;
-        this.tem_day = tem_day;
+        this.weather = weather;
+        this.temperature_night = temperature_night;
+        this.temperature_day = temperature_day;
     }
 
     private String city;
-    private String wea;
-    private String tem_night;
-    private String tem_day;
+    private String weather;
+    private String temperature_night;
+    private String temperature_day;
 }
